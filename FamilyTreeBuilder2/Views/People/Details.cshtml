@@ -16,13 +16,15 @@
     <div>
         @if (Model.Person.FatherNavigation != null)
         {
-            <span>Father: @Model.Person.FatherNavigation.FirstName @Model.Person.FatherNavigation.LastName</span>
+            <b>Father: </b>@(Model.Person.FatherNavigation.FirstName + " " + Model.Person.FatherNavigation.LastName)
             <a asp-action="Details" asp-route-id="@Model.Person.FatherNavigation.Id">Details</a>
+            <br />
         }
         @if (Model.Person.MotherNavigation != null)
         {
-            <span>Father: @Model.Person.MotherNavigation.FirstName @Model.Person.MotherNavigation.LastName</span>
+            <b>Mother: </b>@(Model.Person.MotherNavigation.FirstName + " " + Model.Person.MotherNavigation.LastName)
             <a asp-action="Details" asp-route-id="@Model.Person.MotherNavigation.Id">Details</a>
+            <br />
         }
 
         <h2>@Model.Person.FirstName @Model.Person.LastName</h2>
