@@ -14,11 +14,19 @@
 <body>
 
     <div>
+        @if (Model.Person.MotherNavigation == null && Model.Person.FatherNavigation == null)
+        {
+            <b>No information about parents available</b><br />
+        }
         @if (Model.Person.FatherNavigation != null)
         {
             <b>Father: </b>@(Model.Person.FatherNavigation.FirstName + " " + Model.Person.FatherNavigation.LastName)
             <a asp-action="Details" asp-route-id="@Model.Person.FatherNavigation.Id">Details</a>
             <br />
+        }
+        else
+        {
+            <a asp-action="Create" asp-route-childId="@Model.Person.Id">Add father</a><br />
         }
         @if (Model.Person.MotherNavigation != null)
         {
@@ -26,15 +34,10 @@
             <a asp-action="Details" asp-route-id="@Model.Person.MotherNavigation.Id">Details</a>
             <br />
         }
-        @if (Model.Person.MotherNavigation == null && Model.Person.FatherNavigation == null)
+        else
         {
-            <b>No information about parents available</b><br />
+            <a asp-action="Create" asp-route-childId="@Model.Person.Id">Add mother</a><br />
         }
-        @if (Model.Person.MotherNavigation == null || Model.Person.FatherNavigation == null)
-        {
-            <a asp-action="Create" asp-route-childId="@Model.Person.Id">Add parent</a>
-        }
-
 
         <h2>@Model.Person.FirstName @Model.Person.LastName</h2>
 

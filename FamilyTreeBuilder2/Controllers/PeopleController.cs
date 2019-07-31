@@ -51,7 +51,7 @@ namespace FamilyTreeBuilder2.Controllers
         }
 
         // GET: People/Create
-        public IActionResult Create(int? parentId = null, int? childId = null)
+        public async Task<IActionResult> Create()
         {
             return View();
         }
