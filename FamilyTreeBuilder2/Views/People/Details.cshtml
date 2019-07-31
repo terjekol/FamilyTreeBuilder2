@@ -26,6 +26,15 @@
             <a asp-action="Details" asp-route-id="@Model.Person.MotherNavigation.Id">Details</a>
             <br />
         }
+        @if (Model.Person.MotherNavigation == null && Model.Person.FatherNavigation == null)
+        {
+            <b>No information about parents available</b><br />
+        }
+        @if (Model.Person.MotherNavigation == null || Model.Person.FatherNavigation == null)
+        {
+            <a asp-action="Create" asp-route-childId="@Model.Person.Id">Add parent</a>
+        }
+
 
         <h2>@Model.Person.FirstName @Model.Person.LastName</h2>
 
@@ -95,5 +104,8 @@
             </tbody>
         </table>
     }
+    <div>
+        <a asp-action="Create" asp-route-parentId="@Model.Person.Id">Add child</a>
+    </div>
 </body>
 </html>

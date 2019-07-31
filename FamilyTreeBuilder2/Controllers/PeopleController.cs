@@ -51,10 +51,8 @@ namespace FamilyTreeBuilder2.Controllers
         }
 
         // GET: People/Create
-        public IActionResult Create()
+        public IActionResult Create(int? parentId = null, int? childId = null)
         {
-            ViewData["Father"] = new SelectList(_context.Person, "Id", "Id");
-            ViewData["Mother"] = new SelectList(_context.Person, "Id", "Id");
             return View();
         }
 
