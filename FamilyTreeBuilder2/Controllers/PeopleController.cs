@@ -54,7 +54,7 @@ namespace FamilyTreeBuilder2.Controllers
         // GET: People/Create
         public async Task<IActionResult> Create()
         {
-            SavePotentialParentsInViewData();
+            SavePotentialParentsAndSexesInViewData();
             return View();
         }
 
@@ -72,11 +72,11 @@ namespace FamilyTreeBuilder2.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            SavePotentialParentsInViewData(person);
+            SavePotentialParentsAndSexesInViewData(person);
             return View(person);
         }
 
-        private void SavePotentialParentsInViewData(Person person = null)
+        private void SavePotentialParentsAndSexesInViewData(Person person = null)
         {
             object mapPerson(Person p)
             {
@@ -90,10 +90,19 @@ namespace FamilyTreeBuilder2.Controllers
                 };
             }
 
-            var potentialFathers = _context.Person.Where(p => p.IsMale == true).Select(mapPerson);
-            var potentialMothers = _context.Person.Where(p => p.IsMale == false).Select(mapPerson);
+            var sexes = new object[]
+            {
+                new {Value = (bool?)null, Text=string.Empty},
+                new {Value=(bool?)true, Text="Male"},
+                new {Value=(bool?)false, Text="Female"},
+            };
+            var potentialFathers = _context.Person.Where(p => p.IsMale == true).Select(mapPerson).ToList();
+            var potentialMothers = _context.Person.Where(p => p.IsMale == false).Select(mapPerson).ToList();
+            potentialMothers.Insert(0, new { Id = (int?)null, Name = string.Empty });
+            potentialFathers.Insert(0, new { Id = (int?)null, Name = string.Empty });
             ViewData["Father"] = new SelectList(potentialFathers, "Id", "Name", person?.Father);
             ViewData["Mother"] = new SelectList(potentialMothers, "Id", "Name", person?.Mother);
+            ViewData["Sexes"] = new SelectList(sexes, "Value", "Text", person?.IsMale);
         }
 
 
@@ -110,7 +119,7 @@ namespace FamilyTreeBuilder2.Controllers
             {
                 return NotFound();
             }
-            SavePotentialParentsInViewData(person);
+            SavePotentialParentsAndSexesInViewData(person);
             return View(person);
         }
 
@@ -146,7 +155,7 @@ namespace FamilyTreeBuilder2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            SavePotentialParentsInViewData();
+            SavePotentialParentsAndSexesInViewData();
             return View(person);
         }
 
