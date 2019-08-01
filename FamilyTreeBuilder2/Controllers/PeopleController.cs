@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -69,10 +70,25 @@ namespace FamilyTreeBuilder2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Father"] = new SelectList(_context.Person, "Id", "Id", person.Father);
-            ViewData["Mother"] = new SelectList(_context.Person, "Id", "Id", person.Mother);
+
+            object mapPerson(Person p)
+            {
+                var name = p.FirstName ?? string.Empty;
+                if (p.LastName != null) name += " " + p.LastName;
+                if (p.BirthDate != null) name += " (born " + p.BirthDate.Value.ToShortDateString() + ")";
+                return new
+                {
+                    Id = p.Id,
+                    Name = name
+                };
+            }
+            var potentialFathers = _context.Person.Where(p => p.IsMale == true).Select(mapPerson);
+            var potentialMothers = _context.Person.Where(p => p.IsMale == false).Select(mapPerson);
+            ViewData["Father"] = new SelectList(potentialFathers, "Id", "Id", person.Father);
+            ViewData["Mother"] = new SelectList(potentialMothers, "Id", "Id", person.Mother);
             return View(person);
         }
+
 
         // GET: People/Edit/5
         public async Task<IActionResult> Edit(int? id)
