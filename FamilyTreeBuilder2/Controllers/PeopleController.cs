@@ -54,6 +54,7 @@ namespace FamilyTreeBuilder2.Controllers
         // GET: People/Create
         public async Task<IActionResult> Create()
         {
+            SavePotentialParentsInViewData();
             return View();
         }
 
@@ -71,6 +72,12 @@ namespace FamilyTreeBuilder2.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            SavePotentialParentsInViewData(person);
+            return View(person);
+        }
+
+        private void SavePotentialParentsInViewData(Person person = null)
+        {
             object mapPerson(Person p)
             {
                 var name = p.FirstName ?? string.Empty;
@@ -82,11 +89,11 @@ namespace FamilyTreeBuilder2.Controllers
                     Name = name
                 };
             }
+
             var potentialFathers = _context.Person.Where(p => p.IsMale == true).Select(mapPerson);
             var potentialMothers = _context.Person.Where(p => p.IsMale == false).Select(mapPerson);
-            ViewData["Father"] = new SelectList(potentialFathers, "Id", "Id", person.Father);
-            ViewData["Mother"] = new SelectList(potentialMothers, "Id", "Id", person.Mother);
-            return View(person);
+            ViewData["Father"] = new SelectList(potentialFathers, "Id", "Name", person?.Father);
+            ViewData["Mother"] = new SelectList(potentialMothers, "Id", "Name", person?.Mother);
         }
 
 
@@ -103,8 +110,7 @@ namespace FamilyTreeBuilder2.Controllers
             {
                 return NotFound();
             }
-            ViewData["Father"] = new SelectList(_context.Person, "Id", "Id", person.Father);
-            ViewData["Mother"] = new SelectList(_context.Person, "Id", "Id", person.Mother);
+            SavePotentialParentsInViewData(person);
             return View(person);
         }
 
@@ -140,8 +146,7 @@ namespace FamilyTreeBuilder2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Father"] = new SelectList(_context.Person, "Id", "Id", person.Father);
-            ViewData["Mother"] = new SelectList(_context.Person, "Id", "Id", person.Mother);
+            SavePotentialParentsInViewData();
             return View(person);
         }
 
