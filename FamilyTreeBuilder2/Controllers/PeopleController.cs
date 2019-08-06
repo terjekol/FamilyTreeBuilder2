@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FamilyTreeBuilder2.ModelsGenerated;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FamilyTreeBuilder2.Controllers
 {
+    [Authorize]
     public class PeopleController : Controller
     {
         private readonly FamilyTreeContext _context;
